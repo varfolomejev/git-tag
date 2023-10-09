@@ -6,10 +6,10 @@ git fetch --tags
 last_tag=$(git describe --tags $(git rev-list --tags --max-count=1))
 
 # Parse the major, minor, patch, and rc versions from the tag
-major=$(echo $last_tag | awk -F. '{print $1}')
-minor=$(echo $last_tag | awk -F. '{print $2}')
-patch=$(echo $last_tag | awk -F- '{split($1,a,"."); print a[3]}')
-rc=$(echo $last_tag | awk -F- '{print $3}')
+major=$(echo $last_tag | awk -F. '{if($1=="") print "0"; else print $1}')
+minor=$(echo $last_tag | awk -F. '{if($2=="") print "0"; else print $2}')
+patch=$(echo $last_tag | awk -F- '{split($1,a,"."); if(a[3]=="") print "0"; else print a[3]}')
+rc=$(echo $last_tag | awk -F- '{if($2=="") print "0"; else print $2}')
 
 # Determine the version component to increment (major, minor, patch, or rc)
 if [ "$1" == "major" ]; then
